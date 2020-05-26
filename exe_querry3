@@ -1,0 +1,181 @@
+use clinicaeborae
+
+/*
+consulta.paciente=paciente.bi
+consulta.medico=medico.numero_ordem
+trabalhoturno.turno=turno.id_turno
+trabalhoturno.enfermeiro=enfermeiro.id_enfermeiro
+internamento.paciente=paciente.bi
+internamento.trabalho_turno=trabalhoturno.turno
+
+Paciente (bi, tipo_seguro, nome, morada, codigo_postal, localidade, telefone, idade) 
+Medico (numero_ordem, especialidade, nome, morada, codigo_postal, localidade, telefone, idade) 
+Enfermeiro (id_enfermeiro, tipo_contrato, termo_contrato, nome, morada, codigo_postal, localidade, telefone, idade) 
+Turno (id_turno, data, hora_entrada, hora_saida) 
+Consulta (num_consulta, data_hora, descricao, paciente(FK), medico(FK)) 
+TrabalhoTurno(turno(FK), observacoes, enfermeiro(FK)) 
+Internamento(paciente(FK), trabalho_turno(FK), descricao_estado) 
+*/
+
+/*a*/
+select paciente.nome
+from paciente
+where paciente.nome like'%ia';
+
+/*b*/
+select paciente.nome
+from paciente
+where paciente.nome like'a%'
+or paciente.nome like'j%';
+
+/*c*/
+select paciente.*
+from paciente
+where paciente.localidade like'Évora';
+
+/*d*/
+select medico.nome,consulta.descricao,consulta.data_hora
+from medico,consulta
+where consulta.medico=medico.numero_ordem
+and consulta.data_hora between '2011-11-03 00:00' and '2011-11-05 23:59';
+
+/*e*/
+select distinct paciente.* 
+from paciente,medico,consulta
+where consulta.paciente=paciente.bi
+and consulta.medico=medico.numero_ordem
+and medico.numero_ordem=5551;
+
+/*f*/
+select paciente.nome,paciente.tipo_seguro
+from paciente
+order by paciente.nome desc,paciente.tipo_seguro desc;
+
+/*g*/
+select medico.especialidade,count(*)
+from medico
+group by medico.especialidade;
+
+/*h*/
+select paciente.nome,count(*)
+from paciente,consulta
+where consulta.paciente=paciente.bi
+group by paciente.nome;
+
+/*i*/
+select medico.especialidade,consulta.data_hora
+from medico,consulta
+where consulta.medico=medico.numero_ordem
+and consulta.data_hora>'2011-11-03 23:59'
+order by consulta.data_hora asc;
+
+/*j*/
+select paciente.nome,internamento.descricao_estado
+from internamento,paciente
+where internamento.paciente=paciente.bi;
+
+/*k*/
+select round(avg(medico.idade),2)
+from medico,consulta
+where consulta.medico=medico.numero_ordem
+and consulta.data_hora between'2011-11-01 00:00' and'2011-11-06 23:59';
+
+/*l*/
+select count(paciente.bi)
+from paciente
+where paciente.bi
+not in
+(select internamento.paciente from internamento);
+
+/*m*/
+select paciente.nome
+from paciente
+where paciente.bi
+not in
+(select internamento.paciente from internamento);
+
+/*n*/
+select medico.nome, count(*) as consultas
+from medico,consulta
+where consulta.medico=medico.numero_ordem
+group by medico.numero_ordem
+having consultas>4;
+
+/*o*/
+select internamento.descricao_estado,count(*) as monitorizacoes
+from internamento,trabalhoturno,enfermeiro
+where internamento.paciente=paciente.bi
+and internamento.trabalho_turno=trabalhoturno.turno
+and enfermeiro.nome like'Maria João'
+group by internamento.descricao_estado;
+
+/*p*/
+select count(*) as n_moni
+from internamento,trabalhoturno,enfermeiro
+where internamento.trabalho_turno=trabalhoturno.turno
+and trabalhoturno.enfermeiro=enfermeiro.id_enfermeiro
+and enfermeiro.nome like'Rui Miguel'
+and internamento.descricao_estado like'Estável';
+
+/*q*/
+/*1ª volta(fazer uma contagem e saber quem são)*/
+select paciente.nome,count(*) as contador
+from paciente,consulta
+where consulta.paciente=paciente.bi
+group by paciente.nome;
+/*2ª volta(saber qual é o contador máximo)*/
+select max(contador)
+from
+(select paciente.nome,count(*) as contador
+from paciente,consulta
+where consulta.paciente=paciente.bi
+group by paciente.nome) as temporaria;
+/*3ª volta(caso exista mais de um com a contagem máxima mostrar o nome)*/
+select paciente.nome,count(*) as contador
+from paciente,consulta
+where consulta.paciente=paciente.bi
+group by paciente.nomehaving count=
+(select max(contador)
+from
+(select paciente.nome,count(*) as contador
+from paciente,consulta
+where consulta.paciente=paciente.bi
+group by paciente.nome) as temporaria);
+/*r*/
+select internamento.paciente
+from internamento,trabalhoturno,consulta,paciente,turno
+where consulta.paciente=paciente.bi
+and trabalhoturno.turno=turno.id_turno
+and internamento.paciente=paciente.bi
+and internamento.trabalho_turno=trabalhoturno.turno
+and date(consulta.dta_hora)=turno.data;
+
+/*s*/
+select consulta.medico,count(*)*100 as contador
+from consulta
+where consulta.data_hora between'2011-11-01 00:00' and'2011-11-08 23:59'
+group by consulta.medico;
+
+/*t*/
+/*1ª parte */
+select internamento.trabalhoturno,count(*) as contador
+from internamento
+group by internamento.trabalho_turno as temp;
+
+/*2ª parte (fazer o minimo)*/
+select min(contador)
+from
+(select internamento.trabalhoturno,count(*) as contador
+from internamento
+group by internamento.trabalho_turno) as temporaria;
+
+/*3ª parte */
+select internamento.trabalhoturno,count(*) as contador
+from internamento
+group by internamento.trabalho_turno
+having=
+(select min(contador)
+from
+(select internamento.trabalhoturno,count(*) as contador
+from internamento
+group by internamento.trabalho_turno) as temporaria);
