@@ -21,6 +21,12 @@ from atleta,clube
 where atleta.clube=clube.idclube
 order by clube.nome;
 
+/*aa*/
+select atleta.*,clube.nome
+from atleta,clube
+where atleta.clube=clube.idclube
+order by clube.nome;
+
 /*b)*/
 select prova.nome,estadio.nome,atleta.nome,prova.dataprova
 from prova,estadio,inscricao,atleta
@@ -63,3 +69,44 @@ and inscricao.prova=prova.idprova
 and atleta.clube=clube.idclube
 and atleta.localidade=clube.localidade
 and clube.localidade=local.distrito;
+
+/*f)*/
+select prova.nome,count(*)
+from prova,inscricao
+where inscricao.prova=prova.idprova
+group by prova.nome;
+
+/*g)*/
+select clube.nome,sum(atleta.salario)
+from atleta,clube
+where atleta.clube=clube.idclube
+group by clube.nome;
+
+/*h*/
+select clube.nome,round((sum(atleta.salario)*0.6),2)
+from atleta,clube
+where atleta.clube=clube.idclube
+group by clube.nome;
+
+/*i*/
+select prova.nome,atleta.nome,max(atleta.salario)
+from atleta,prova,inscricao
+where inscricao.atleta=atleta.natleta
+and inscricao.prova=prova.idprova
+group by prova.nome;
+
+/*j*/
+select max(contador)
+from
+(select clube.nome,count(*) as contador
+from clube,atleta 
+where clube.idclube=atleta.clube
+group by clube.nome) as temporaria;
+
+
+/*k*/
+select atleta.nome
+from atleta
+where atleta.natleta
+not in
+(select atleta from inscricao);
