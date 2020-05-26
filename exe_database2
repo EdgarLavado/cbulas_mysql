@@ -1,0 +1,52 @@
+create database eboraecafe;
+use eboraecafe;
+create table local(cod_local int not null primary key,latitude double,longitude double,descricao varchar(254));
+create table empregado(bi int not null primary key,nome varchar(254),morada varchar(254),telefone int);
+create table cafe(id_cafe int not null primary key auto_increment,nome varchar(254),morada varchar(254),cod_local int, foreign key (cod_local)references local(cod_local));
+create table trabalho(cod_trab int not null primary key,data date,salario double,id_cafe int,bi_emp int, foreign key(id_cafe) references cafe(id_cafe), foreign key(bi_emp) references empregado(bi));
+
+insert into local(cod_local,latitude,longitude,descricao) VALUES
+(1,38.571261,-7.914443,'Évora'),
+(2,38.566296,-7.909722,'Évora'),
+(3,38.003865,-7.866249,'Beja'),
+(19,38.755612,-9.188448,'Lisboa'),
+(20,38.715986,-9.152257,'Lisboa'),
+(35,37.103029,-8.367456,'Armação de Pêra');
+
+insert into empregado(bi,nome,morada,telefone) VALUES
+(123,'Rui Jorge','Quinta A',111111111),
+(124,'Anabela Pinto', 'Quinta B',222222222),
+(125,'Pedro Matias', 'Quinta C',333333333),
+(126,'Maria Gomes','Quinta D',444444444),
+(127,'Manuel Tavares','Quinta E',555555555),
+(128,'Ana Pires','Rua ZZ',666666666),
+(129,'Paula Ruiz','Rua AA',777777777),
+(130,'Pedro Maria','Rua BB',88888888),
+(131,'Paula Guedes','Rua BB',111111112),
+(132,'Carolina Tavares','Rua BB',222222223),
+(133,'António Rebelo','Rua BB',222222224),
+(134,'José Pedro','Rua BB',333333334);
+
+select* from empregado;
+
+insert into cafe(nome,morada,cod_local) VALUES
+('Aqui há Café', 'Rua A', 1),
+('Café da Sogra', 'Rua da Rosa', 3),
+('O Nosso Café', 'Rua B', 20),
+('Aqui há Café', 'Rua Z', 35),
+('Eborina Café', 'Rua XX', 2),
+('A Lisboeta', 'Rua do Carmo', 19);
+
+insert into trabalho(cod_trab,data,salario,id_cafe,bi_emp) VALUES
+(10,'2014-02-02', 800.70, 1,123),
+(11,'2017-04-03', 460.76,1,129),
+(12,'2015-05-04', 750, 2, 124),
+(13,'2001-11-11', 978, 4, 125),
+(14,'2009-11-10', 770, 3, 126),
+(15, '2016-01-02', 665, 3, 127),
+(16, '2016-01-02', 665, 3, 128),
+(17, '2015-05-04', 750, 4, 130),
+(18, '2015-05-04', 750, 4, 131),
+(19, '2014-02-02', 800.70, 5,132),
+(20, '2009-11-10', 770, 5, 133),
+(21, '2015-05-04', 750, 2, 134);
