@@ -1,0 +1,79 @@
+create database clinicaeborae;
+use clinicaeborae;
+
+create table paciente(bi int not null primary key,tipo_seguro varchar(254),nome varchar(254), morada varchar(254),codigo_postal varchar(254),localidade varchar(254), telefone int, idade int);
+create table medico(numero_ordem int not null primary key,especialidade varchar(254),nome varchar(254),morada varchar(254), codigo_postal varchar(254),localidade varchar(254), telefone int, idade int);
+create table enfermeiro(id_enfermeiro int not null primary key, tipo_contrato varchar(254), termo_contrato date, nome varchar(254),morada varchar(254),codigo_postal varchar(254), localidade varchar(254), telefone int,idade int);
+create table turno(id_turno int not null primary key auto_increment,data date,hora_entrada time,hora_saida time);
+create table consulta(num_consulta int not null primary key auto_increment,data_hora timestamp, descricao varchar(254), paciente int,medico int, foreign key(paciente) references paciente(bi), foreign key(medico)references medico(numero_ordem));
+create table trabalhoturno(turno int not null primary key,observacoes varchar(254), enfermeiro int, foreign key(turno) references turno(id_turno),foreign key(enfermeiro) references enfermeiro(id_enfermeiro));
+create table internamento(paciente int not null, trabalho_turno int not null, descricao_estado varchar(254), primary key(paciente,trabalho_turno),foreign key(paciente)references paciente(bi),foreign key(trabalho_turno)references trabalhoturno(turno));
+
+insert into paciente(nome,bi,morada,localidade,codigo_postal,telefone,idade,tipo_seguro) values
+('Ana Maria',12347,'Rua C nº55','Évora','7000-152',991234569,59,'ADMG'),
+('Sofia Silva',12348,'Rua A nº3','Lisboa','1250-052',991234570,22,'Medis'),
+('António Correia',12349,'Rua A nº3','Évora','7005-652',991234571,61,'ADMG');
+
+insert into paciente(nome,bi,morada,localidade,codigo_postal,telefone,idade,tipo_seguro) values
+('Joaquim Pereira',12345,'Rua A nº2','Évora','7005-652',991234567,35,'Medis'),
+('José Ricardo',12346,'Rua B nº44','Évora','7005-412',991234568,42,'Medis');
+
+insert into medico(nome,numero_ordem,especialidade,localidade,morada,codigo_postal,telefone,idade) values
+('Pedro Caetano',5551,'Clínica Geral','Évora','Rua Z nº1','7000-123',994512312,51),
+('Rita Margarida',7124,'Ortopedia','Évora','Rua Z nº2','7000-123',991762712,51);
+
+insert into enfermeiro(nome,id_enfermeiro,tipo_contrato,termo_contrato,localidade,morada,codigo_postal,telefone,idade) values
+('Rui Miguel',9541,'Termo Certo','2011-11-09','Évora','Rua E nº1','7000-413',997682912,35),
+('Maria João',9172,'Termo Certo','2011-11-30','Évora','Rua E nº2','7000-413',998762192,29);
+
+insert into turno(data,hora_entrada,hora_saida) values
+('2011-11-01','00:00','12:00'),
+('2011-11-01','12:01','23:59'),
+('2011-11-02','00:00','12:00'),
+('2011-11-02','12:01','23:59'),
+('2011-11-03','00:00','12:00'),
+('2011-11-03','12:01','23:59'),
+('2011-11-04','00:00','12:00'),
+('2011-11-04','12:01','23:59'),
+('2011-11-05','00:00','12:00'),
+('2011-11-05','12:01','23:59'),
+('2011-11-06','00:00','12:00'),
+('2011-11-06','12:01','23:59'),
+('2011-11-07','00:00','12:00'),
+('2011-11-07','12:01','23:59'),
+('2011-11-08','00:00','12:00'),
+('2011-11-08','12:01','23:59');
+
+insert into consulta(paciente,descricao,medico,data_hora) values
+(12345,'1ªconsulta',5551,'2011-11-01 16:00'),
+(12345,'Rotina',5551,'2011-11-05 14:00'),
+(12346,'1ªconsulta',7124,'2011-11-05 15:30'),
+(12346,'Rotina',7124,'2011-11-08 14:30'),
+(12346,'Rotina',7124,'2011-11-05 16:30'),
+(12347,'1ªconsulta',5551,'2011-11-03 15:30'),
+(12347,'Rotina',7124,'2011-11-07 14:00'),
+(12348,'Rotina',5551,'2011-11-05 15:00'),
+(12349,'1ªconsulta',7124,'2011-11-05 15:30');
+
+insert into trabalhoturno(enfermeiro,turno) values
+(9541,1),
+(9541,5),
+(9541,9),
+(9541,13),
+(9541,4),
+(9541,8),
+(9541,12),
+(9541,16),
+(9172,3),
+(9172,7),
+(9172,11),
+(9172,15),
+(9172,2),
+(9172,6),
+(9172,10),
+(9172,14);
+
+insert into internamento(paciente,trabalho_turno,descricao_estado) values
+(12345,3,'Estável'),
+(12347,14,'Pouco Estável'),
+(12349,3,'Estável');
