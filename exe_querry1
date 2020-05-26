@@ -1,0 +1,91 @@
+a)
+Select empregado.nome 
+from empregado
+order by empregado.nome asc;
+
+b)
+Select empregado.nome 
+from empregado
+order by empregado.nome desc;
+
+c)
+Select empregado.nome,empregado.bi
+from empregado
+order by empregado.nome desc;
+
+d)
+Select cafe.nome,local.descricao
+from cafe,local
+where local.cod_local=cafe.cod_local;
+
+e)
+Select empregado.nome,trabalho.salario
+from empregado,trabalho
+where empregado.bi=trabalho.bi_emp
+order by trabalho.salario asc;
+
+f)
+Select empregado.nome
+from empregado
+where empregado.telefone=222222222;
+
+g)
+select cafe.nome
+from cafe,local
+where local.cod_local=cafe.cod_local 
+and local.descricao like'Évora';
+
+h)
+select empregado.nome
+from empregado,cafe,local,trabalho
+where empregado.bi=trabalho.bi_emp 
+and cafe.id_cafe=trabalho.id_cafe
+and local.cod_local=cafe.cod_local
+and local.descricao like'Lisboa';
+
+i)
+select empregado.bi,cafe.id_cafe,trabalho.salario
+from empregado,cafe,trabalho
+where cafe.id_cafe=trabalho.id_cafe
+and empregado.bi=trabalho.bi_emp
+and cafe.nome like'Aqui há Café'
+group by cafe.id_cafe;
+
+ia)
+select cafe.id_cafe,SUM(trabalho.salario)AS total_salario
+from cafe,trabalho
+where cafe.id_cafe=trabalho.id_cafe
+and cafe.nome like'Aqui há Café'
+group by cafe.id_cafe;
+
+j)
+select empregado.nome,local.latitude,local.longitude
+from empregado,local,trabalho,cafe
+where local.cod_local=cafe.cod_local
+and cafe.id_cafe=trabalho.id_cafe
+and empregado.bi=trabalho.bi_emp
+and trabalho.salario=750;
+
+k)
+select cafe.id_cafe,cafe.nome,count(trabalho.bi_emp) as contagem
+from cafe,trabalho
+where cafe.id_cafe=trabalho.id_cafe
+group by cafe.id_cafe;
+
+l)
+select cafe.id_cafe,max(trabalho.salario) as top_salario
+from cafe,trabalho
+where cafe.id_cafe=trabalho.id_cafe
+group by cafe.id_cafe;
+
+m)
+select cafe.id_cafe,sum(trabalho.salario) as total
+from cafe,trabalho
+where cafe.id_cafe=trabalho.id_cafe
+group by cafe.id_cafe;
+
+n)
+select cafe.id_cafe,round(avg(trabalho.salario),2) as media
+from cafe,trabalho
+where cafe.id_cafe=trabalho.id_cafe
+group by cafe.id_cafe;
