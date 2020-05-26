@@ -1,0 +1,72 @@
+MySql- Prático
+
+Workbench
+- Edit – preferences – SQL Editor (safe updates)
+
+
+Mostrar Base de Dados
+-	show databases;
+
+Criar Base de Dados
+-	create database nome_db;
+-	use nome_db;
+
+Apagar Base de Dados
+-	drop database nome_db;
+
+Mostrar tabelas
+-	show tables;
+
+Mostrar como as tabelas foram criadas
+-	show create table nome_tb;
+
+Apagar tabelas
+-	drop table nome_tb;
+
+Criar tabelas
+-	create table nome_tb(campo int not null primary key auto_increment(quando esta for automatica), campo varchar(254), campo double, campo date, campo timestamp, foreign key (campo) references nome_tb_origem(campo_pk));
+	
+	Duas chaves primárias/compostas
+-	create table nome_tb(campo1 int not null, campo2 int not null, campo varchar(254), campo double, campo date, campo timestamp, PRIMARY KEY(campo1, campo2), foreign key (campo1) references nome_tb1_origem(campo_pk), foreign key (campo2) references nome_tb2_origem(campo_pk));
+
+Ver campos e tipos de dados
+-	describe nome_tb;
+
+
+Inserir registos nas tabelas
+-	insert into nome_tb(campo1,campo2) values (1,’nome’,’17-12-01’), (2,’nome’,’17-09-01’);
+	
+	Inserir registos nas tabelas de outras tabelas
+-	insert into nome_tb(campo1,campo2) select nome_tb_origem1.campo1, nome_tb_origem2.campo2 from  nome_tb_origem1, nome_tb_origem2 where campo1>=condição and/or campo2>=condição;
+-	insert into salas(select distinct null,salaacao from acao);
+
+Ver todos os dados de uma tabela
+-	select * from nome_tb;
+
+Apagar dados na tabela
+-	delete from nome_tb;
+-	delete from nome_tb where campo1=condição and/or campo2=condição;
+
+Atualizar dados na tabela
+-	update nome_tb set campo=novoregisto;
+-	update nome_tb set campo=novoregisto where campo1=condição and/or campo2=condição;
+
+Incluir campos na tabela
+-	alter table nome_tb add campo_add tipo dados;
+-	alter table nome_tb add campo_add tipo dados after campo_anterior;
+-	alter table nome_tb add campo_add tipo dados first;
+-	alter table nome_tb add primary key (campo);
+-	alter table nome_tb add foreign key (campo) references nome_tb_origem(campo_pk);
+
+Modificar campos e tipos de dados
+-	alter table nome_tb change campo_errado campo_certo tipo dados;
+
+Apagar campos na tabela com o Alter
+-	alter table nome_tb drop campo_drop;
+-	alter table nome_tb drop foreign key campo
+
+Auto_increment
+-	delete from nome_tb;
+-	alter table nome_tb auto_increment=1;
+(quando não funciona exportamos a base de dados escrevemos AUTO_INCREMENT=1 e voltamos a importá-la.
+
