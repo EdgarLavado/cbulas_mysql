@@ -1,0 +1,65 @@
+use gesprovas;
+
+/*atleta.clube=clube.idclube
+prova.estadio=estadio.idestadio
+estadio.local=local.idlocal
+inscricao.atleta=atleta.natleta
+inscricao.prova=prova.idprova
+
+Clube(idclube, nome, localidade, datafundacao)
+Atleta(natleta, nome, localidade, idade, salario, alturacm, pesokg, clube(fk))
+Inscricao(ninscricao, atleta(fk), prova(fk))
+Prova(idprova, nome, dataprova, estadio(fk))
+Estadio(idestadio, nome, local(fk))
+Local(idlocal, latitude, longitude, localidade, distrito)
+*/
+  
+/*a)*/
+select atleta.natleta,atleta.nome,atleta.idade,atleta.pesokg,atleta.alturacm,
+atleta.salario,clube.nome
+from atleta,clube
+where atleta.clube=clube.idclube
+order by clube.nome;
+
+/*b)*/
+select prova.nome,estadio.nome,atleta.nome,prova.dataprova
+from prova,estadio,inscricao,atleta
+where prova.estadio=estadio.idestadio
+and inscricao.atleta=atleta.natleta
+and inscricao.prova=prova.idprova
+order by prova.nome;
+
+/*c)*/
+select atleta.nome
+from atleta,clube
+where atleta.clube=clube.idclube
+and atleta.localidade like'Évora'
+and atleta.alturacm<200
+and atleta.pesokg>75
+and atleta.idade<50
+and clube.localidade like'Lisboa'
+order by atleta.nome asc;
+
+/*d)*/
+select distinct prova.nome
+from prova,atleta,clube,inscricao,estadio,local
+where atleta.clube=clube.idclube
+and inscricao.atleta=atleta.natleta
+and inscricao.prova=prova.idprova
+and prova.estadio=estadio.idestadio
+and estadio.local=local.idlocal
+and local.distrito like'Évora'
+and atleta.salario>300
+and clube.nome like 'Clube X'
+and prova.dataprova between '2012-07-01' and '2012-07-15';
+
+/*e)*/
+select distinct atleta.nome
+from atleta,clube,prova,estadio,local,inscricao
+where prova.estadio=estadio.idestadio
+and estadio.local=local.idlocal
+and inscricao.atleta=atleta.natleta
+and inscricao.prova=prova.idprova
+and atleta.clube=clube.idclube
+and atleta.localidade=clube.localidade
+and clube.localidade=local.distrito;
