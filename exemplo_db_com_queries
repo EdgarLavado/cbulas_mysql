@@ -1,0 +1,79 @@
+CREATE DATABASE venda;
+(cria a base de dados venda)
+
+USE venda;
+(usa a base de dados)
+
+CREATE TABLE cliente(id int NOT NULL AUTO_INCREMENT, nome varchar(254), morada varchar(254), telefone int(15), email varchar(254), CONSTRAINT pk_cliente PRIMARY KEY(ID));
+(cria a tabela cliente)
+
+CREATE TABLE marca(id int NOT NULL AUTO_INCREMENT, descricao varchar(254), CONSTRAINT pk_marca PRIMARY KEY (ID));
+CREATE TABLE modelo(id int NOT NULL AUTO_INCREMENT, id_marca int, descricao varchar(254), CONSTRAINT pk_modelo PRIMARY KEY(ID), CONSTRAINT fk_idmarca FOREIGN KEY(id_marca) REFERENCES marca(id));
+(cria a tabela marca)
+
+CREATE TABLE produto(id int NOT NULL AUTO_INCREMENT, nome varchar(254), preco int, id_marca int, id_modelo int, data_registo datetime, data_alteracao timestamp, CONSTRAINT pk_produto PRIMARY KEY(id), CONSTRAINT fk_promarca FOREIGN KEY(id_marca) REFERENCES marca(id), CONSTRAINT fk_promodelo FOREIGN KEY(id_modelo) REFERENCES modelo(id));
+(cria a tabela produto)
+
+CREATE TABLE compra(id int NOT NULL AUTO_INCREMENT, id_cliente int, id_produto int, data timestamp, CONSTRAINT pk_numero PRIMARY KEY(ID), CONSTRAINT fk_comcliente FOREIGN KEY(id_cliente) REFERENCES cliente(id), CONSTRAINT fk_comproduto FOREIGN KEY(id_produto) REFERENCES produto(id));
+(cria a balema compra)
+
+INSERT INTO marca(descricao) VALUES("Apple");
+INSERT INTO marca(descricao) VALUES("Huaweii");
+(inserir na tabela marca os valores)
+
+INSERT INTO modelo(id_marca, descricao) VALUES(1, "MacAirbook");
+INSERT INTO modelo(id_marca, descricao) VALUES(1, "MacBookPro");
+(inserir na tabela modelo os valores)
+
+INSERT INTO cliente(nome, morada, telefone, email) VALUES("Tiago","Évora", 860300300, "tramalho@gmail.com");
+INSERT INTO cliente(nome, morada, telefone, email) VALUES("Antonio","Lisboa", 860360360, "anta@gmail.com");
+(inserir na tabela cliente os valores)
+
+INSERT INTO produto(nome, preco, id_marca, id_modelo, data_registo) VALUES("Portatil", 299, 1, 1, NOW());
+INSERT INTO produto(nome, preco, id_marca, id_modelo, data_registo) VALUES("Portatil", 499, 1, 2, NOW());
+(inserir na tabela produto os valores)
+
+INSERT INTO compra(id_cliente, id_produto) VALUES(1, 8);
+INSERT INTO compra(id_cliente, id_produto) VALUES(1, 5);
+(inserir na tabela compra os valores)
+
+Exemplos de queries a Base de dados:
+SELECT cliente.id, cliente.nome FROM cliente WHERE nome LIKE "A%";
+
+SELECT cliente.id, cliente.nome, cliente.morada FROM cliente WHERE nome LIKE "B%" AND morada LIKE "Évora";
+
+SELECT DISTINCT cliente.morada FROM cliente;
+
+SELECT COUNT(id_produto) FROM compra WHERE id_produto=1;
+
+SELECT marca.descricao, modelo.descricao FROM marca,modelo, produto WHERE produto.id_modelo=modelo.id AND modelo.id_marca=marca.id AND produto.id=2;
+
+SELECT cliente.nome FROM cliente WHERE cliente.morada LIKE "Lisboa";
+
+SELECT produto.preco FROM produto WHERE preco BETWEEN 100 AND 200;
+
+SELECT produto.nome, produto.preco FROM produto WHERE preco BETWEEN 100 AND 200;
+
+SELECT produto.nome, produto.id_marca, produto.id_modelo FROM produto WHERE produto.id=2;
+
+SELECT cliente.nome FROM cliente WHERE cliente.nome LIKE "A%";
+
+SELECT cliente.nome FROM cliente WHERE cliente.nome LIKE "b%" AND cliente.morada LIKE "Évora";
+
+SELECT DISTINCT cliente.morada FROM cliente;
+
+SELECT COUNT(id) FROM compra WHERE id_produto = 1;
+
+SELECT DISTINCT cliente.nome, produto.nome FROM cliente, produto, compra WHERE compra.id_cliente= cliente.id AND compra.id_produto = produto.id AND produto.nome LIKE "Produto A";
+
+SELECT marca.descricao, modelo.descricao FROM marca, modelo, produto WHERE modelo.id = produto.id_modelo AND marca.id = modelo.id_marca AND produto.id = 2;
+
+SELECT cliente.nome FROM cliente WHERE cliente.morada LIKE "Lisboa";
+
+SELECT * FROM produto WHERE preco BETWEEN 100 AND 200;
+
+UPDATE produto SET produto.preco = 200 WHERE produto.id=2;
+
+SELECT produto.data_registo, produto.data_alteracao FROM produto WHERE nome LIKE "Produto A";
+
+SELECT COUNT(compra.id) FROM compra WHERE compra.id_cliente=2;
